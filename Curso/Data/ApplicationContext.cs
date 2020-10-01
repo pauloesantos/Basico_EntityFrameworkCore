@@ -9,7 +9,7 @@ namespace Curso.Data
         public DbSet<Pedido> Pedidos { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data source=(localdb)\\mssqllocaldb; Initial Catalog=Curso EF Core;Integreted Security=true");
+            optionsBuilder.UseSqlServer("Data source=(localdb)\\mssqllocaldb; Initial Catalog=Curso EF Core;Integrated Security=true");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
