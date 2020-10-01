@@ -21,7 +21,7 @@ namespace Curso.Data
             //modelBuilder.ApplyConfiguration(new PedidoItemConfiguration());
 
             //fazer para todos
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly)
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
         }
     }
 }
