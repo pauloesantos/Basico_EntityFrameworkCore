@@ -22,7 +22,34 @@ namespace CursoEFCore
 
             Console.WriteLine("Hello World!");
 
-            InserirDados();
+            //InserirDados();
+            InserirDadosMassa();
+        }
+        private static void InserirDadosMassa()
+        {
+            var produto = new Produto
+            {
+                Descricao = "Produto Teste",
+                CodigoBarras = "1234567891234",
+                Valor = 10m,
+                TipoProduto = TipoProduto.MercadoriaParaRevenda,
+                Ativo = true
+            };
+            var cliente = new Cliente
+            {
+                Nome = "Victoria",
+                CEP = "12092000",
+                Cidade = "Taubaté",
+                Estado = "SP",
+                Telefone = "001580678"
+            };
+
+            using var db = new ApplicationContext();
+            db.AddRange(produto, cliente);
+
+            var registros = db.SaveChanges();
+            Console.WriteLine($"Total registro(s) = {registros}");
+
         }
 
         private static void InserirDados()
