@@ -1,3 +1,4 @@
+using System.Linq;
 using Curso.Data.Configurations;
 using Curso.Domain;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,25 @@ namespace Curso.Data
 
             //fazer para todos
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
+            MapearPropriedadesEsquecidas(modelBuilder);
+        }
+
+        private void MapearPropriedadesEsquecidas(ModelBuilder modelBuilder)
+        {
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                var properties = entity.GetProperties().Where(p => p.ClrType == typeof(string));
+
+                foreach (var property in properties)
+                {
+                    if (string.IsNullOrEmpty(property.GetColumnType())
+                        && !property.GetMaxLength().HasValue)
+                    {
+                        //property.SetMaxLength(100);
+                        property.SetColumnType("VARCHAR(100)");
+                    }
+                }
+            }
         }
     }
 }
