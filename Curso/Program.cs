@@ -4,6 +4,7 @@ using Curso.Data;
 using System.Linq;
 using Curso.Domain;
 using Curso.ValueObjects;
+using System.Collections.Generic;
 
 namespace CursoEFCore
 {
@@ -17,13 +18,63 @@ namespace CursoEFCore
             var existe = db.Database.GetPendingMigrations().Any();
             if (existe)
             {
-                //
+                //executa algo caso exista migração pendente
             }
 
-            Console.WriteLine("Hello World!");
+            //Console.WriteLine("Hello World!");
 
             //InserirDados();
-            InserirDadosMassa();
+            //InserirDadosMassa();
+            //ConsultaDados();
+            CadastrarPedidos();
+        }
+
+        private static void CadastrarPedidos()
+        {
+            using var db = new ApplicationContext();
+
+            var cliente = db.Clientes.FirstOrDefault();
+            var produto = db.Produtos.FirstOrDefault();
+
+            var pedido = new Pedido
+            {
+                ClienteId = cliente.Id,
+                IniciandoEm = DateTime.Now,
+                FinalizadoEm = DateTime.Now,
+                Observacao = "Pedido de Teste",
+                Status = StatusPedido.Analise,
+                TipoFrete = TipoFrete.SemFrete,
+                Itens = new List<PedidoItem>
+                {
+                    new PedidoItem
+                    {
+                        ProdutoId = produto.Id,
+                        Desconto = 0,
+                        Quantidade = 1,
+                        Valor = 10,
+                    }
+                }
+            };
+            db.Pedidos.Add(pedido);
+
+            db.SaveChanges();
+        }
+
+
+        private static void ConsultaDados()
+        {
+            using var db = new ApplicationContext();
+            //var consultaPorSintaxe = (from c in db.Clientes where c.Id > 0 select c).ToList();
+            var consultaPorMetodo = db.Clientes
+                .Where(p => p.Id > 0)
+                .OrderBy(p => p.Id)
+                .ToList();
+            foreach (var cliente in consultaPorMetodo)
+            {
+                Console.WriteLine($"Consultando Cliente:{cliente.Id}");
+                //db.Clientes.Find(cliente.Id);
+                // db.Clientes.FirstOrDefault(p => p.Id = cliente.Id);
+            }
         }
         private static void InserirDadosMassa()
         {
