@@ -26,9 +26,23 @@ namespace CursoEFCore
             //InserirDados();
             //InserirDadosMassa();
             //ConsultaDados();
-            CadastrarPedidos();
+            //CadastrarPedidos();
+            ConsultaPedidoCarregamentoAdiantado();
         }
 
+        private static void ConsultaPedidoCarregamentoAdiantado()
+        {
+            using var db = new ApplicationContext();
+
+            //var pedidos = db.Pedidos.Include("Itens").ToList();
+            var pedidos = db
+                .Pedidos
+                .Include(p => p.Itens)
+                .ThenInclude(p => p.Produto)
+                .ToList();
+
+            Console.WriteLine(pedidos.Count);
+        }
         private static void CadastrarPedidos()
         {
             using var db = new ApplicationContext();
