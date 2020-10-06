@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Curso.Data.Configurations;
 using Curso.Domain;
@@ -17,7 +18,11 @@ namespace Curso.Data
             optionsBuilder
                 .UseLoggerFactory(_logger)
                 .EnableSensitiveDataLogging()
-                .UseSqlServer("Data source=(localdb)\\mssqllocaldb; Initial Catalog=Curso EF Core;Integrated Security=true");
+                .UseSqlServer("Data source=(localdb)\\mssqllocaldb; Initial Catalog=Curso EF Core;Integrated Security=true"
+                , p => p.EnableRetryOnFailure(
+                    maxRetryCount: 2,
+                    maxRetryDelay: TimeSpan.FromSeconds(5),
+                    errorNumbersToAdd: null));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
