@@ -27,9 +27,50 @@ namespace CursoEFCore
             //InserirDadosMassa();
             //ConsultaDados();
             //CadastrarPedidos();
-            ConsultaPedidoCarregamentoAdiantado();
+            //ConsultaPedidoCarregamentoAdiantado();
+            //AtualizaDados();
+            RemoveRegistro();
         }
+        private static void RemoveRegistro()
+        {
+            using var db = new ApplicationContext();
 
+            //var cliente = db.Clientes.Find(4);
+
+            // desconectado
+            var cliente = new Cliente { Id = 3 };
+
+            //db.Clientes.Remove(cliente);
+            db.Remove(cliente);
+            //db.Entry(cliente).State = EntityState.Deleted;
+
+            db.SaveChanges();
+
+        }
+        private static void AtualizaDados()
+        {
+            using var db = new ApplicationContext();
+
+            var cliente = db.Clientes.Find(4);
+            //cliente.Nome = "Precilina Bussi";
+            //atualiza todos o campos da tabela            
+            //db.Clientes.Update(cliente);
+            //informa de EF de forma explicita alterar todos os campos 
+            //db.Entry(cliente).State = EntityState.Modified;
+
+            //metodo desconectado
+            var clienteDeconectado = new
+            {
+                Nome = "Desconectado",
+                Telefone = "190605941"
+            };
+            db.Entry(cliente).CurrentValues.SetValues(clienteDeconectado);
+
+            //somente o savechanges monitora e atualiza só o campo alterado
+            db.SaveChanges();
+
+
+        }
         private static void ConsultaPedidoCarregamentoAdiantado()
         {
             using var db = new ApplicationContext();
@@ -38,7 +79,7 @@ namespace CursoEFCore
             var pedidos = db
                 .Pedidos
                 .Include(p => p.Itens)
-                .ThenInclude(p => p.Produto)
+                    .ThenInclude(p => p.Produto)
                 .ToList();
 
             Console.WriteLine(pedidos.Count);
@@ -94,7 +135,7 @@ namespace CursoEFCore
         {
             var produto = new Produto
             {
-                Descricao = "Produto Teste",
+                Descricao = "Teste",
                 CodigoBarras = "1234567891234",
                 Valor = 10m,
                 TipoProduto = TipoProduto.MercadoriaParaRevenda,
@@ -102,7 +143,7 @@ namespace CursoEFCore
             };
             var cliente = new Cliente
             {
-                Nome = "Victoria",
+                Nome = "Paulo",
                 CEP = "12092000",
                 Cidade = "Taubaté",
                 Estado = "SP",
